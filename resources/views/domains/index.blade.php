@@ -62,20 +62,22 @@
                                     @endif
                                 </div>
 
+                                {{-- ACTIONS : Voir concepts + Modifier + Supprimer --}}
                                 <div class="mt-4 pt-4 border-t flex justify-between items-center">
-                                    <a href="{{ route('domains.edit', $domain) }}" 
+                                    <a href="{{ route('domains.concepts.index', $domain) }}" 
                                        class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                        Modifier
+                                        Voir les concepts ({{ $domain->concepts_count }})
                                     </a>
-                                    <form action="{{ route('domains.destroy', $domain) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" 
-                                                onclick="return confirm('Supprimer ce domaine ? Tous les concepts associés seront perdus.')"
-                                                class="text-red-600 hover:text-red-800 text-sm font-medium">
-                                            Supprimer
-                                        </button>
-                                    </form>
+                                    <div class="flex gap-3">
+                                        <a href="{{ route('domains.edit', $domain) }}" 
+                                           class="text-gray-600 hover:text-gray-800 text-sm">Modifier</a>
+                                        <form action="{{ route('domains.destroy', $domain) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" onclick="return confirm('Supprimer ce domaine ?')"
+                                                    class="text-red-600 hover:text-red-800 text-sm">Supprimer</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>

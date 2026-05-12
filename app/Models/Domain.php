@@ -28,4 +28,5 @@ class Domain extends Model
     {
         return $this->concepts()->where('status', 'maitrise')->count();
     }
+    
 }
