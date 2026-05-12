@@ -33,7 +33,7 @@
 
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            
+
             {{-- Explication --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Explication</h3>
@@ -42,7 +42,7 @@
                 </div>
             </div>
 
-            {{-- Bouton génération AI (US11) --}}
+            {{-- Questions d'entretien avec AI --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-medium text-gray-900">Questions d'entretien</h3>
@@ -55,18 +55,36 @@
                     </form>
                 </div>
 
+                @if(session('success'))
+                    <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 @if($concept->questionGenerations->isEmpty())
                     <p class="text-gray-500 text-sm">Aucune question générée. Cliquez sur le bouton ci-dessus pour générer 5 questions d'entretien réalistes.</p>
                 @else
                     <div class="space-y-4">
                         @foreach($concept->questionGenerations->sortByDesc('created_at') as $generation)
                             <div class="border rounded-lg p-4">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-xs text-gray-500">{{ $generation->created_at->format('d/m/Y H:i') }}</span>
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-xs text-gray-500">
+                                        {{ $generation->created_at->format('d/m/Y H:i') }}
+                                    </span>
                                     <form action="{{ route('questions.destroy', $generation) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-700 text-xs">Supprimer</button>
+                                        <button type="submit" 
+                                                onclick="return confirm('Supprimer cette génération ?')"
+                                                class="text-red-500 hover:text-red-700 text-xs">
+                                            Supprimer
+                                        </button>
                                     </form>
                                 </div>
                                 <ol class="list-decimal list-inside space-y-2">

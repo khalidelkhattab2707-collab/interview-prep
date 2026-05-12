@@ -4,6 +4,8 @@ use App\Http\Controllers\ConceptController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\QuestionGenerationController;
 
 // Routes d'authentification Breeze
 require __DIR__.'/auth.php';
@@ -18,9 +20,9 @@ Route::middleware('auth')->group(function () {
 // Vos routes protégées
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+   Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
     
     Route::resource('domains', DomainController::class);
     
@@ -32,5 +34,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('domains/{domain}/concepts/{concept}', [ConceptController::class, 'update'])->name('domains.concepts.update');
     Route::delete('domains/{domain}/concepts/{concept}', [ConceptController::class, 'destroy'])->name('domains.concepts.destroy');
     Route::patch('domains/{domain}/concepts/{concept}/status', [ConceptController::class, 'updateStatus'])->name('domains.concepts.status');
-    
+    Route::get('/test-groq-key', function () {
+    return config('services.groq.api_key') ? 'Clé OK ✅' : 'Clé manquante ❌';
+       });
+       Route::post('domains/{domain}/concepts/{concept}/questions/generate', 
+    [QuestionGenerationController::class, 'generate'])
+    ->name('questions.generate');
+
+    Route::delete('questions/{generation}', 
+    [QuestionGenerationController::class, 'destroy'])
+    ->name('questions.destroy');
+
 });

@@ -22,7 +22,7 @@ class GroqAIService
                 'Authorization' => 'Bearer ' . $this->apiKey,
                 'Content-Type' => 'application/json',
             ])->timeout(30)->post($this->baseUrl . '/chat/completions', [
-                'model' => 'llama3-8b-8192',
+                'model' => 'llama-3.1-8b-instant',  // ← MODÈLE CORRIGÉ
                 'messages' => [
                     [
                         'role' => 'system',
